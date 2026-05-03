@@ -1,3 +1,8 @@
+# This is the approach of using LangChain directly instead of using Model Integration Clients.
+# We can just change the name of the Model and it will work fine.
+
+# =========================== The ReAct Loop code example ===========================
+
 from dotenv import load_dotenv  # Import the load_dotenv function to load environment variables from a .env file
 load_dotenv()  # Execute load_dotenv to load the environment variables
 
@@ -75,7 +80,7 @@ def run_agent(question: str):  # Define the main agent function
             print(f"\n Final Answer: {ai_message.content}")  # Print final answer
             return ai_message.content  # Return the answer
 #        Process only the FIRST tool call -- force one tool per iteration  # Comment for processing tool calls
-        tool_call = tool_calls[0]  # Get the first tool call
+        tool_call = tool_calls[0] # Get the first tool call, this gives the tool to be called
         tool_name = tool_call.get("name")  # Get the tool name
         tool_args = tool_call.get("args")  # Get the tool arguments
         tool_call_id = tool_call.get("id")  # Get the tool call ID
