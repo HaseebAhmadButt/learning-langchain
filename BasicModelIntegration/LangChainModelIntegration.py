@@ -1,5 +1,26 @@
 # This project is developed using "pip3" package manager.
 
+# LangChain Framework is structured around a set of core abstractions + standardized interfaces,
+# which force every integration (OpenAI, HuggingFace, Pinecone, etc.) to conform to
+# the same contract. That’s how it achieves plug-and-play behavior.
+# At a macro level, LangChain is split into:
+#   1. Core (langchain_core) → interfaces, base classes, schemas
+#   2. Integrations (langchain_*) → providers implementing those interfaces
+#   3. Orchestration layer → chains, agents, execution logic
+
+# Everything revolves around:
+#               "Standard interface → multiple interchangeable implementations"
+# So instead of coding against OpenAI directly, you code against:
+# BaseLLM
+# BaseChatModel
+# Embeddings
+# VectorStore
+# Retriever
+# Tool
+#
+# Each provider just implements these.
+
+
 # Import necessary modules
 from dotenv import load_dotenv
 import os
