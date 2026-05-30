@@ -5,11 +5,10 @@
 # https://nisum.udemy.com/course/langchain/learn/lecture/51359991?udFrontends=false#content
 import asyncio
 import os, ssl
-from typing import Any, Dict, List
+from typing import List
 import certifi
 from dotenv import load_dotenv
 from langchain_classic import text_splitter
-from langchain_classic.agents.agent_toolkits import vectorstore
 
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_chroma import Chroma
@@ -17,6 +16,7 @@ from langchain_core.documents import Document
 from langchain_openai import OpenAIEmbeddings
 from langchain_pinecone import PineconeVectorStore
 from langchain_tavily import TavilyCrawl, TavilyExtract, TavilyMap
+from sqlalchemy.ext.asyncio import result
 
 # Load environment variables from .env file
 load_dotenv()
@@ -35,7 +35,8 @@ embeddings = OpenAIEmbeddings(
     # send the next 50.
     chunk_size=50,
     # After every failure, minimum wait for the next request.
-    retry_min_seconds=10
+    retry_min_seconds=10,
+    dimensions=512
 )
 
 # chroma = Chroma(persist_directory="chroma_db", embedding_function=embeddings)
@@ -65,7 +66,7 @@ async def main():
         # extract_depth: Dictates the method and thoroughness of the data extraction on each page.
         # Setting this to "advanced" tells Tavily to perform a high-quality scrape, which typically
         # includes rendering dynamic JavaScript, bypassing basic anti-bot walls, and returning cleaner,
-        # more structured markdown or text compared to a basic HTML pull.
+        # more structured Markdown or text compared to a basic HTML pull.
         "extract_depth": "advanced",
         # This will tell crawler to select which page and to ignore which page.
         "instructions": "content on ai agents"
@@ -75,11 +76,53 @@ async def main():
     # Access the content from the dictionary (Tavily returns dicts, not Document objects)
     langChainDocuments = []
     for doc in all_docs:
+        for doc in all_docs:
+            print(len(doc.get("raw_content")))
         langChainDocuments.append(Document(page_content=doc["raw_content"], metadata={"source": doc["url"]}))
     # Now you have a list of Document objects that you can use for embedding and vector storage.
     print(f"First document content preview: {langChainDocuments[0].page_content[:500]}")  # Print the first 500 characters of the first document
     text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=200)
     split_docs = text_splitter.split_documents(langChainDocuments)
+
+    print(f"Documents before split: {len(langChainDocuments)}")
+    print(f"Documents after split: {len(split_docs)}")
+
+    await index_document_async(split_docs, batch_size=5)
+
+
+async def index_document_async(documents: List[Document], batch_size: int = 50):
+    """Process documents in batches asynchronously."""
+    # Both of these approaches work, but the second one is more concise.
+    # batches = []
+    #
+    # for i in range(0, len(documents), batch_size):
+    #     batch = documents[i: i + batch_size]
+    #     batches.append(batch)
+
+    batches = [
+        documents[i : i + batch_size] for i in range(0, len(documents), batch_size)
+    ]
+    print(f"VectorStore Indexing: Split into {len(batches)} batches of {batch_size} documents each.")
+
+    async def add_batch(batch: List[Document], batch_num: int):
+        try:
+            await vectorstore.aadd_documents(batch)
+        except Exception as e:
+            print(f"VectorStore Indexing: Failed to add batch {batch_num}: {e}")
+            return False
+        return True
+
+    # Process batches concurrently
+    tasks = [add_batch(batch, i+1) for i, batch in enumerate(batches)]
+    results = await asyncio.gather(*tasks, return_exceptions=True)
+
+    # Count successful batches
+    successful = sum(1 for result in results if result is True)
+    if successful == len(batches):
+        print(f"VectorStore Indexing: Successfully indexed all {len(documents)} documents in {len(batches)} batches.")
+    else:
+        print(f"VectorStore Indexing: Only indexed {successful} out of {len(batches)} batches.")
+
 
 
 if __name__ == "__main__":
