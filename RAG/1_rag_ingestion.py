@@ -42,7 +42,7 @@ if __name__ == "__main__":
     # chunk_overlap=0: There is no overlap between consecutive chunks -
     # they are split cleanly without repetition
 
-    # Overlap is useful in 3_RAG (Retrieval-Augmented Generation) systems because:
+    # Overlap is useful in RAG (Retrieval-Augmented Generation) systems because:
     # Preserves Context: When you have chunk_overlap=200, for example, the last 200
     # characters of one chunk are repeated at the start of the next chunk. This preserves
     # important context that might be lost at chunk boundaries.

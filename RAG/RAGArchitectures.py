@@ -1,4 +1,4 @@
-# 2-Step 3_RAG
+# 2-Step RAG
 # -------------------------
 # Core idea:
 #   A fixed pipeline with exactly two phases: retrieval and generation.
@@ -22,7 +22,7 @@
 #   - Retrieval quality heavily depends on initial query formulation
 
 
-# Agentic 3_RAG
+# Agentic RAG
 # -------------------------
 # Core idea:
 #   The LLM acts as an agent that controls the retrieval process dynamically.
@@ -54,7 +54,7 @@
 #   - Output can be less deterministic
 
 
-# Hybrid 3_RAG
+# Hybrid RAG
 # -------------------------
 # Core idea:
 #   Combine multiple retrieval strategies or data sources before passing context to the LLM.
@@ -90,11 +90,11 @@
 # Weaknesses:
 #   - More system complexity
 #   - Requires tuning of fusion/ranking strategy
-#   - Harder infrastructure setup than basic 3_RAG
+#   - Harder infrastructure setup than basic RAG
 
 
 # Summary Mental Model
 # -------------------------
-# 2-Step 3_RAG    -> "retrieve once, then answer"
-# Agentic 3_RAG   -> "think, search, refine, repeat"
-# Hybrid 3_RAG    -> "use multiple retrieval systems together"
+# 2-Step RAG    -> "retrieve once, then answer"
+# Agentic RAG   -> "think, search, refine, repeat"
+# Hybrid RAG    -> "use multiple retrieval systems together"

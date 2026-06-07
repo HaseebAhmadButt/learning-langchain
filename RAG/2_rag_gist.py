@@ -123,11 +123,11 @@ if __name__ == "__main__":
     query = "What is Pinecone in Machine Learning?"
 
     # ===================================================
-    # Option 0: Raw invocation without 3_RAG
+    # Option 0: Raw invocation without RAG
     # ===================================================
 
     print("\n" + "=" * 70)
-    print("IMPLEMENTATION 0: Raw LLM Invocation without 3_RAG")
+    print("IMPLEMENTATION 0: Raw LLM Invocation without RAG")
     print("="*70)
     result_raw = llm.invoke([HumanMessage(content=query)])
     print("\nAnswer: ")
