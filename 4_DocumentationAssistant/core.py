@@ -37,14 +37,14 @@ def retrieve_context(query: str):
             retrieve_docs # Used by application
             )
 
-# This will run the RAG pipeline to answer a query using retrieved documentation.
-# The agent automatically executes the steps we implemented in previous RAG files to implement the RAG pipeline when we call agent.invoke(query).
+# This will run the 3_RAG pipeline to answer a query using retrieved documentation.
+# The agent automatically executes the steps we implemented in previous 3_RAG files to implement the 3_RAG pipeline when we call agent.invoke(query).
 # It automatically populates the system message and calls the retrieve_context tool to retrieve relevant documentation.
 # The retrieved documentation is then used as context to generate a response to the user's query.
-# This is like a short and automated version of the RAG pipeline.
+# This is like a short and automated version of the 3_RAG pipeline.
 def run_llm(query: str):
     """
-    Run the RAG pipeline to answer a query using retrieved documentation.
+    Run the 3_RAG pipeline to answer a query using retrieved documentation.
     Args:
         query:
 
