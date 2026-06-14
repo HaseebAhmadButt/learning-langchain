@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="PySourceRootDetectionService">
+    <option name="sourcePathsSet">
+      <set>
+        <option value="$PROJECT_DIR$/5_LangGraph/Agentic RAG" />
+        <option value="$PROJECT_DIR$/5_LangGraph/Agentic RAG/graph" />
+        <option value="$PROJECT_DIR$/5_LangGraph/5_SelfRAG" />
+      </set>
+    </option>
+  </component>
+</project>
